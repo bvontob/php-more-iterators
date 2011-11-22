@@ -1,8 +1,8 @@
 --TEST--
-TransformCallbackIterator: Basic use case
+CallbackTransformIterator: Basic use case
 --FILE--
 <?php
-require_once("TransformCallbackIterator.php");
+require_once("CallbackTransformIterator.php");
 
 $innerIterator = new ArrayIterator(array('a' => "one",
                                          'B' => "two",
@@ -14,7 +14,7 @@ function strtoupperIfKeyIsUpper($value, $key, $iterator) {
   return $value;
 }
 
-foreach(new TransformCallbackIterator($innerIterator, 'strtoupperIfKeyIsUpper')
+foreach(new CallbackTransformIterator($innerIterator, 'strtoupperIfKeyIsUpper')
         as $newValue)
   print "$newValue\n";
 

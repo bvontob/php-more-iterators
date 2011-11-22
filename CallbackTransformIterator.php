@@ -1,11 +1,11 @@
 <?php
 /**
- * Class TransformCallbackIterator implements an Iterator that transforms
+ * Class CallbackTransformIterator implements an Iterator that transforms
  * the values of another Iterator through a callback provided from the
  * outside.
  */
 
-class TransformCallbackIterator extends IteratorIterator
+class CallbackTransformIterator extends IteratorIterator
 implements Iterator, Traversable, OuterIterator {
 
   private $transformCallback;
