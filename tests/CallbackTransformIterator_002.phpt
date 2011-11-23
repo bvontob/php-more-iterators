@@ -1,5 +1,5 @@
 --TEST--
-CallbackTransformIterator: Basic use case
+CallbackTransformIterator: Transforming both keys and values
 --FILE--
 <?php
 require_once("CallbackTransformIterator.php");
@@ -14,12 +14,18 @@ function strtoupperIfKeyIsUpper($value, $key, $iterator) {
   return $value;
 }
 
-foreach(new CallbackTransformIterator($innerIterator, 'strtoupperIfKeyIsUpper')
+function ordOfKey($value, $key, $iterator) {
+  return ord($key);
+}
+
+foreach(new CallbackTransformIterator($innerIterator,
+                                      'strtoupperIfKeyIsUpper',
+                                      'ordOfKey')
         as $newKey => $newValue)
   print "$newKey => $newValue\n";
 
 ?>
 --EXPECT--
-a => one
-B => TWO
-c => three
+97 => one
+66 => TWO
+99 => three

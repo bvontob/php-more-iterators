@@ -8,7 +8,8 @@
 class CallbackTransformIterator extends IteratorIterator
 implements Iterator, Traversable, OuterIterator {
 
-  private $transformCallback;
+  private $valueCallback;
+  private $keyCallback;
 
 
   /**
@@ -19,13 +20,21 @@ implements Iterator, Traversable, OuterIterator {
    * only use the first of the three arguments (the value). It must return
    * the transformed value.
    *
+   * The optional third argument is a second transformation callback working
+   * on the key.
+   *
    * XXX: Replace internal type check with a typehint for $callback as of
    *      PHP 5.4, when this should be added as a new feature...
    */
-  public function __construct(Traversable $iterator, $callback = NULL) {
-    if(isset($callback) && !is_callable($callback))
-      throw new Exception(__CLASS__.": Second argument must be a callback");
-    $this->transformCallback = $callback;
+  public function __construct(Traversable $iterator,
+                              $callback = NULL,
+                              $keyCallback = NULL) {
+    if((isset($callback) && !is_callable($callback))
+       || (isset($keyCallback) && !is_callable($keyCallback)))
+      throw new Exception(__CLASS__.": Second and third arguments must be ".
+                          "callbacks (or NULL)");
+    $this->valueCallback = $callback;
+    $this->keyCallback   = $keyCallback;
     parent::__construct($iterator);
   }
 
@@ -35,12 +44,26 @@ implements Iterator, Traversable, OuterIterator {
    * by the callback provided to the constructor.
    */
   public function current() {
-    if(isset($this->transformCallback))
-      return call_user_func($this->transformCallback,
+    if(isset($this->valueCallback))
+      return call_user_func($this->valueCallback,
                             parent::current(),
-                            $this->key(),
+                            parent::key(),
                             $this->getInnerIterator());
     return parent::current();
+  }
+
+
+  /**
+   * key() will return the current key of the inner Iterator transformed
+   * by the callback provided to the constructor.
+   */
+  public function key() {
+    if(isset($this->keyCallback))
+      return call_user_func($this->keyCallback,
+                            parent::current(),
+                            parent::key(),
+                            $this->getInnerIterator());
+    return parent::key();
   }
 }
 
