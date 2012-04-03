@@ -4,6 +4,9 @@
  * we added our own here.
  */
 
+if(class_exists('CallbackFilterIterator'))
+  return;
+
 class CallbackFilterIterator extends FilterIterator
 implements Iterator, Traversable, OuterIterator {
 
