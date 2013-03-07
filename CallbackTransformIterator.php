@@ -22,17 +22,10 @@ implements Iterator, Traversable, OuterIterator {
    *
    * The optional third argument is a second transformation callback working
    * on the key.
-   *
-   * XXX: Replace internal type check with a typehint for $callback as of
-   *      PHP 5.4, when this should be added as a new feature...
    */
   public function __construct(Traversable $iterator,
-                              $callback = NULL,
-                              $keyCallback = NULL) {
-    if((isset($callback) && !is_callable($callback))
-       || (isset($keyCallback) && !is_callable($keyCallback)))
-      throw new Exception(__CLASS__.": Second and third arguments must be ".
-                          "callbacks (or NULL)");
+                              callable $callback = NULL,
+                              callable $keyCallback = NULL) {
     $this->valueCallback = $callback;
     $this->keyCallback   = $keyCallback;
     parent::__construct($iterator);
