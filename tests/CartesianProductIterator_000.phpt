@@ -12,6 +12,11 @@ if(preg_match('/\?>\s*$/', $source))
 else
   echo "CartesianProductIterator is missing closing PHP tag at end\n";
 
+if(preg_match('/\x0d/', $source))
+  echo "CartesianProductIterator does contain CR characters (Windows or Mac line endings)\n";
+else
+  echo "CartesianProductIterator does not contain CR characters (Windows or Mac line endings)\n";
+
 $global_vars = array_keys($GLOBALS);
 
 ob_start();
@@ -38,5 +43,6 @@ else
 ?>
 --EXPECT--
 CartesianProductIterator has closing PHP tag at end
+CartesianProductIterator does not contain CR characters (Windows or Mac line endings)
 Parsing of CartesianProductIterator was silent
 CartesianProductIterator did not pollute global variable space

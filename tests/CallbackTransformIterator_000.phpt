@@ -12,6 +12,11 @@ if(preg_match('/\?>\s*$/', $source))
 else
   echo "CallbackTransformIterator is missing closing PHP tag at end\n";
 
+if(preg_match('/\x0d/', $source))
+  echo "CallbackTransformIterator does contain CR characters (Windows or Mac line endings)\n";
+else
+  echo "CallbackTransformIterator does not contain CR characters (Windows or Mac line endings)\n";
+
 $global_vars = array_keys($GLOBALS);
 
 ob_start();
@@ -38,5 +43,6 @@ else
 ?>
 --EXPECT--
 CallbackTransformIterator has closing PHP tag at end
+CallbackTransformIterator does not contain CR characters (Windows or Mac line endings)
 Parsing of CallbackTransformIterator was silent
 CallbackTransformIterator did not pollute global variable space
