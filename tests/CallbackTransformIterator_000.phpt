@@ -5,6 +5,7 @@ CallbackTransformIterator: Automatic smoke test (syntax, warnings, silence)
 $source      = FALSE;
 $output      = FALSE;
 $global_vars = array();
+$cr_okay     = FALSE;
 
 $source = file_get_contents("CallbackTransformIterator.php");
 if(preg_match('/\?>\s*$/', $source))
@@ -12,10 +13,20 @@ if(preg_match('/\?>\s*$/', $source))
 else
   echo "CallbackTransformIterator is missing closing PHP tag at end\n";
 
-if(preg_match('/\x0d/', $source))
-  echo "CallbackTransformIterator does contain CR characters (Windows or Mac line endings)\n";
+if(file_exists(preg_replace("|[^/]+$|", "DOS_LINE_ENDINGS", "CallbackTransformIterator"))) {
+  // Check for a consistent use of only CRLF if a "DOS_LINE_ENDINGS" marker
+  // file exists in the containing folder
+  $cr_okay = (preg_match_all('/\x0d\x0a/', $source) == preg_match_all('/\x0d/', $source)
+              && preg_match_all('/\x0d\x0a/', $source) == preg_match_all('/\x0a/', $source));
+} else {
+  // Otherwise (normal situation) any CR character is treated as a bug
+  $cr_okay = !preg_match('/\x0d/', $source);
+}
+
+if($cr_okay)
+  echo "CallbackTransformIterator does not contain CR characters (or is consistent and in a folder marked with DOS_LINE_ENDINGS)\n";
 else
-  echo "CallbackTransformIterator does not contain CR characters (Windows or Mac line endings)\n";
+  echo "CallbackTransformIterator does contain CR characters (and is not consistent or not in a folder marked with DOS_LINE_ENDINGS)\n";
 
 $global_vars = array_keys($GLOBALS);
 
@@ -43,6 +54,6 @@ else
 ?>
 --EXPECT--
 CallbackTransformIterator has closing PHP tag at end
-CallbackTransformIterator does not contain CR characters (Windows or Mac line endings)
+CallbackTransformIterator does not contain CR characters (or is consistent and in a folder marked with DOS_LINE_ENDINGS)
 Parsing of CallbackTransformIterator was silent
 CallbackTransformIterator did not pollute global variable space
