@@ -8,8 +8,6 @@ $global_vars = array();
 $cr_okay     = FALSE;
 
 $source = file_get_contents("CallbackTransformIterator.php");
-$lines  = preg_split('/(\\x0a|\\x0d)+/', $source, 0, PREG_SPLIT_NO_EMPTY);
-
 if(preg_match('/\?>\s*$/', $source))
   echo "CallbackTransformIterator has closing PHP tag at end\n";
 else
@@ -53,31 +51,9 @@ else
   print "CallbackTransformIterator added these variables to global space: ".
         implode(", ", array_diff(array_keys($GLOBALS), $global_vars)).
         "\n";
-
-$class_defs = array();
-foreach($lines as $line) {
-  if(preg_match('/^\s*((abstract)\s+)?(class|interface|trait)\s+([a-z0-9_]+)/i', $line, $matches)) {
-    $new_def = "$matches[3] $matches[4]";
-    if($matches[3] == 'class'
-       && preg_match('/Exception$/', $matches[4])) {
-      foreach($class_defs as $class_def) {
-        if(preg_match("/^$class_def/", $new_def))
-          continue 2;
-      }
-    }
-    $class_defs[] = $new_def;
-  }
-}
-if(count($class_defs) <= 1) {
-  print "CallbackTransformIterator contains at most one class, interface, or trait (except for Exception classes)\n";
-} else {
-  print "CallbackTransformIterator contains multiple classes/interfaces/traits:\n";
-  print "  ".implode("\n  ", $class_defs)."\n";
-}
 ?>
 --EXPECT--
 CallbackTransformIterator has closing PHP tag at end
 CallbackTransformIterator does not contain CR characters (or is consistent and in a folder marked with DOS_LINE_ENDINGS)
 Parsing of CallbackTransformIterator was silent
 CallbackTransformIterator did not pollute global variable space
-CallbackTransformIterator contains at most one class, interface, or trait (except for Exception classes)
