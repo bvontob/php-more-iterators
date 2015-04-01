@@ -8,7 +8,7 @@
  *
  * <code>
  *   class MyEmptyIterator implements Iterator, Countable {
- *     use IteratorCountableEmpty;
+ *     use traitIteratorCountableEmpty;
  *   }
  * </code>
  *
@@ -18,7 +18,7 @@
  * @author Beat Vontobel
  * @since  2015-04-01
  */
-trait IteratorCountableEmpty {
+trait traitIteratorCountableEmpty {
   public function count() {
     return 0;
   }

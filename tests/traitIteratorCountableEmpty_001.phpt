@@ -5,7 +5,7 @@ traitIteratorCountableEmpty: Basic usage
 require_once("traitIteratorCountableEmpty.php");
 
 class TestIteratorCountableEmpty implements Iterator, Countable {
-  use IteratorCountableEmpty;
+  use traitIteratorCountableEmpty;
 }
 
 $empty = TestHelpers::pnewdebug("TestIteratorCountableEmpty");
