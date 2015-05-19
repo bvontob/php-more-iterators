@@ -25,6 +25,14 @@ abstract class SplitIterator extends IteratorIterator {
     $this->key = 0;
     $this->splitIterator = new SplitInnerIterator($this->getInnerIterator(), $this);
   }
+
+  /**
+   * @todo We need to anticipate here, if we really can return a
+   *     SplitInnerIterator, and not just stupidly forward.
+   */
+  final public function valid() {
+    return parent::valid();
+  }
 }
 
 class SplitInnerIterator extends NoRewindIterator {
@@ -44,6 +52,8 @@ class SplitInnerIterator extends NoRewindIterator {
   }
 
   final public function valid() {
+    if(!$this->outerIterator->getInnerIterator()->valid())
+      return FALSE;
     return $this->valid;
   }
 }
