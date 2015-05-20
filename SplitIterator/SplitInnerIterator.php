@@ -29,17 +29,35 @@ class SplitInnerIterator extends NoRewindIterator {
   }
 
   final public function next() {
-    $this->valid = !$this->outerIterator->needsSplit($this->key(), $this->current());
-    if($this->valid) {
-      parent::next();
-      $this->valid = $this->outerIterator->getInnerIterator()->valid();
+    if(!$this->valid)
+      return;
+
+    if($this->outerIterator->needsSplit($this->key(), $this->current())) {
+      $this->valid = FALSE;
+      return;
     }
+
+    parent::next();
+    $this->valid = $this->outerIterator->getInnerIterator()->valid();
+    return;
   }
 
   final public function valid() {
     return $this->valid;
   }
 
+  /**
+   * Immediately invalidates this iterator.
+   *
+   * The iterator will return NULL from its {@see key()} and {@see
+   * current()} methods, and FALSE for {@see valid()} immediately
+   * after this call (forever, as it can't be rewound through {@see
+   * rewind()}.
+   *
+   * @return void
+   *
+   * @see valid()
+   */
   final public function invalidate() {
     $this->valid = FALSE;
   }
