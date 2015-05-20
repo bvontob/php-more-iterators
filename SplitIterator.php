@@ -19,12 +19,18 @@ abstract class SplitIterator extends IteratorIterator {
   final public function next() {
     parent::next();
     $this->key++;
-    $this->splitIterator = new SplitInnerIterator($this->getInnerIterator(), $this);
+    $this->splitOff();
   }
 
   final public function rewind() {
     parent::rewind();
     $this->key = 0;
+    $this->splitOff();
+  }
+
+  protected function splitOff() {
+    if(isset($this->splitIterator))
+      $this->splitIterator->invalidate();
     $this->splitIterator = new SplitInnerIterator($this->getInnerIterator(), $this);
   }
 

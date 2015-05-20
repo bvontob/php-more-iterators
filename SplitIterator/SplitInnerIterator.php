@@ -39,5 +39,9 @@ class SplitInnerIterator extends NoRewindIterator {
   final public function valid() {
     return $this->valid;
   }
+
+  final public function invalidate() {
+    $this->valid = FALSE;
+  }
 }
 ?>
