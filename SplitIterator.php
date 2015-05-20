@@ -1,4 +1,6 @@
 <?php
+require_once("SplitIterator/SplitInnerIterator.php");
+
 abstract class SplitIterator extends IteratorIterator {
   abstract public function needsSplit($key, $value);
 
@@ -32,29 +34,6 @@ abstract class SplitIterator extends IteratorIterator {
    */
   final public function valid() {
     return parent::valid();
-  }
-}
-
-class SplitInnerIterator extends NoRewindIterator {
-  private $outerIterator;
-
-  private $valid = TRUE;
-
-  final public function __construct(Traversable $iterator, SplitIterator $outerIterator) {
-    $this->outerIterator = $outerIterator;
-    parent::__construct($iterator);
-  }
-
-  final public function next() {
-    $this->valid = !$this->outerIterator->needsSplit($this->key(), $this->current());
-    if($this->valid) {
-      parent::next();
-      $this->valid = $this->outerIterator->getInnerIterator()->valid();
-    }
-  }
-
-  final public function valid() {
-    return $this->valid;
   }
 }
 ?>
