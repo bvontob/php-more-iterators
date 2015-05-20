@@ -1,6 +1,13 @@
 <?php
 require_once("SplitIterator/SplitInnerIterator.php");
 
+/**
+ *
+ * @author     Beat Vontobel
+ * @since      2015-05-20
+ * @package    MeteoNews\phplib
+ * @subpackage Iterators
+ */
 abstract class SplitIterator extends IteratorIterator {
   abstract public function needsSplit($key, $value);
 

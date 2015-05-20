@@ -3,6 +3,11 @@
  * Class CallbackTransformIterator implements an Iterator that transforms
  * the values of another Iterator through a callback provided from the
  * outside.
+ *
+ * @author     Beat Vontobel
+ * @since      2011-11-22
+ * @package    MeteoNews\phplib
+ * @subpackage Iterators
  */
 
 class CallbackTransformIterator extends IteratorIterator

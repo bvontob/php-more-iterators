@@ -8,6 +8,11 @@
  * iterator, and rewinding it would also mess with the state of the
  * outer iterator).
  *
+ * @author     Beat Vontobel
+ * @since      2015-05-20
+ * @package    MeteoNews\phplib
+ * @subpackage Iterators
+ *
  * @see SplitIterator
  */
 class SplitInnerIterator extends NoRewindIterator {

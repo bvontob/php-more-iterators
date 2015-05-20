@@ -3,13 +3,22 @@
  * Class CartesianProductIterator implements an Iterator that iterates over two
  * Iterators, returning all the values of the second Iterator for every value
  * of the first Iterator, aka performing a cartesian product or a CROSS JOIN as
- * it would be called in SQL. Each joined value of the product is returned as
- * an array of the two values like this:
+ * it would be called in SQL.
  *
- *   array(valueFrom1stIterator, valueFrom2ndIterator)
+ * Each joined value of the product is returned as an array of the two
+ * values like this:
+ *
+ *   <code>
+ *     array(valueFrom1stIterator, valueFrom2ndIterator)
+ *   </code>
  *
  * The keys of the Iterators are discarded, this class will instead return a
  * sequential numeric key.
+ *
+ * @author     Beat Vontobel
+ * @since      2011-11-24
+ * @package    MeteoNews\phplib
+ * @subpackage Iterators
  */
 
 class CartesianProductIterator extends IteratorIterator

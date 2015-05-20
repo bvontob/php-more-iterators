@@ -15,8 +15,10 @@
  * Just saves you some typing for Mock-Ups, test cases, or other
  * classes that will never contain anything.
  *
- * @author Beat Vontobel
- * @since  2015-04-01
+ * @author     Beat Vontobel
+ * @since      2015-04-01
+ * @package    MeteoNews\phplib
+ * @subpackage Iterators
  */
 trait traitIteratorCountableEmpty {
   public function count() {
