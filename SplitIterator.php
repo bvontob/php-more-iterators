@@ -47,13 +47,13 @@ class SplitInnerIterator extends NoRewindIterator {
 
   final public function next() {
     $this->valid = !$this->outerIterator->needsSplit($this->key(), $this->current());
-    if($this->valid)
+    if($this->valid) {
       parent::next();
+      $this->valid = $this->outerIterator->getInnerIterator()->valid();
+    }
   }
 
   final public function valid() {
-    if(!$this->outerIterator->getInnerIterator()->valid())
-      return FALSE;
     return $this->valid;
   }
 }
