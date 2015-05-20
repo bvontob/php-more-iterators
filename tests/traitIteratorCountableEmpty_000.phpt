@@ -61,7 +61,7 @@ foreach($lines as $line) {
     if($matches[3] == 'class'
        && preg_match('/Exception$/', $matches[4])) {
       foreach($class_defs as $class_def) {
-        if(preg_match("/^$class_def/", $new_def))
+        if(preg_match("/^".preg_replace("/^(trait|interface)/", "class", $class_def)."/", $new_def))
           continue 2;
       }
     }
