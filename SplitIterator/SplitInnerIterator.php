@@ -43,7 +43,7 @@ class SplitInnerIterator extends NoRewindIterator {
     }
 
     parent::next();
-    $this->valid = $this->outerIterator->getInnerIterator()->valid();
+    $this->valid = parent::valid();
     return;
   }
 
