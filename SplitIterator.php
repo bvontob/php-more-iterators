@@ -146,8 +146,8 @@ abstract class SplitIterator extends IteratorIterator {
       $this->currentSplitIterator->next();
 
     parent::next();
-    $this->key++;
-    $this->splitOff();
+    if($this->splitOff())
+      $this->key++;
   }
 
   public function rewind() {
@@ -171,7 +171,8 @@ abstract class SplitIterator extends IteratorIterator {
    * This internal method exists as the exact same code flow is needed
    * in {@see rewind()} as well as {@see next()}.
    *
-   * @return void
+   * @return bool TRUE if a new {@see SplitInnerIterator} could be
+   *     split off, FALSE otherwise.
    */
   private function splitOff() {
     if(isset($this->currentSplitIterator)) {
@@ -179,9 +180,13 @@ abstract class SplitIterator extends IteratorIterator {
       $this->currentSplitIterator = NULL;
     }
 
-    if(parent::valid())
+    if(parent::valid()) {
       $this->currentSplitIterator
         = new SplitInnerIterator($this->getInnerIterator(), $this);
+      return TRUE;
+    } else {
+      return FALSE;
+    }
   }
 }
 ?>
