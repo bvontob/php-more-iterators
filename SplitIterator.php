@@ -138,12 +138,13 @@ abstract class SplitIterator extends IteratorIterator {
     return $this->currentSplitIterator;
   }
 
-  /**
-   * @todo Handle the situation where the outside calls this
-   *     "prematurely" (before the split-off iterator has been
-   *     iterated through).
-   */
   public function next() {
+    // In case we get called while one of our split iterators
+    // is still active (early break): Eat that one first
+    while(isset($this->currentSplitIterator)
+          && $this->currentSplitIterator->valid())
+      $this->currentSplitIterator->next();
+
     parent::next();
     $this->key++;
     $this->splitOff();
