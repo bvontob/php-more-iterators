@@ -18,9 +18,9 @@
  * @todo Instead of having a specific SplitInnerIterator, this could
  *       actually be something like a {@see LimitCallbackIterator}, a
  *       form of an {@see LimitIterator} that determines its starting
- *       and stopping item not from a fixed index position, but from
- *       a respective callback.  For this iterator here we just need
- *       the stop callback (always starting from the current position,
+ *       and stopping item not from a fixed index position, but from a
+ *       respective callback.  For this iterator here we just need the
+ *       stop callback (always starting from the current position,
  *       ignoring the start callback), and need to add the no-rewind
  *       feature (as we wouldn't inherit from {@see NoRewindIterator}
  *       anymore).  Don't have the time to implement the full-fledged
