@@ -182,7 +182,7 @@ abstract class SplitIterator extends IteratorIterator {
 
     if(parent::valid()) {
       $this->currentSplitIterator
-        = new SplitInnerIterator($this->getInnerIterator(), $this);
+        = new SplitInnerIterator($this->getInnerIterator(), array($this, 'needsSplit'));
       return TRUE;
     } else {
       return FALSE;

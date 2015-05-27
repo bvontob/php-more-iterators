@@ -14,14 +14,27 @@
  * @subpackage Iterators
  *
  * @see SplitIterator
+ *
+ * @todo Instead of having a specific SplitInnerIterator, this could
+ *       actually be something like a {@see LimitCallbackIterator}, a
+ *       form of an {@see LimitIterator} that determines its starting
+ *       and stopping item not from a fixed index position, but from
+ *       a respective callback.  For this iterator here we just need
+ *       the stop callback (always starting from the current position,
+ *       ignoring the start callback), and need to add the no-rewind
+ *       feature (as we wouldn't inherit from {@see NoRewindIterator}
+ *       anymore).  Don't have the time to implement the full-fledged
+ *       limiting callback iterator right now, so we have just a
+ *       beginning (what's actually needed) here in the inner iterator
+ *       for the {@see SplitIterator} right now.
  */
 class SplitInnerIterator extends NoRewindIterator {
-  private $outerIterator;
+  private $stopCallback;
 
   private $valid = TRUE;
 
-  final public function __construct(Traversable $iterator, SplitIterator $outerIterator) {
-    $this->outerIterator = $outerIterator;
+  final public function __construct(Traversable $iterator, callable $stopCallback) {
+    $this->stopCallback = $stopCallback;
     parent::__construct($iterator);
   }
 
@@ -37,7 +50,8 @@ class SplitInnerIterator extends NoRewindIterator {
     if(!$this->valid)
       return;
 
-    if($this->outerIterator->needsSplit($this->key(), $this->current())) {
+    $stopCallback = $this->stopCallback; // Due to PHP's syntax restrictions
+    if($stopCallback($this->key(), $this->current())) {
       $this->valid = FALSE;
       return;
     }
