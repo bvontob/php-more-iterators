@@ -84,6 +84,32 @@ require_once("SplitIterator/SplitInnerIterator.php");
  */
 abstract class SplitIterator extends IteratorIterator {
   /**
+   * Flag to denote that splitting should take place after the element
+   * that fired on {@see needsSplit()} (i.e. this very element will
+   * still be returned from the previous split-off iterator).
+   *
+   * @see SPLIT_BEFORE
+   */
+  const SPLIT_AFTER  = 0;
+
+  /**
+   * Flag to denote that splitting should take place before the
+   * element that fired on {@see needsSplit()} (i.e. this very element
+   * will already be returned by the next split-off iterator).
+   *
+   * @see SPLIT_AFTER
+   */
+  const SPLIT_BEFORE = 1;
+
+  /**
+   * Flag to denote the time of splitting with regards to {@see
+   * needsSplit()} firing.
+   *
+   * @see SPLIT_AFTER, SPLIT_BEFORE
+   */
+  protected $splitWhen = self::SPLIT_AFTER;
+
+  /**
    * The current item (which is the split-off iterator) returned from
    * this class.
    *
@@ -145,7 +171,6 @@ abstract class SplitIterator extends IteratorIterator {
           && $this->currentSplitIterator->valid())
       $this->currentSplitIterator->next();
 
-    parent::next();
     if($this->splitOff())
       $this->key++;
   }
@@ -180,9 +205,19 @@ abstract class SplitIterator extends IteratorIterator {
       $this->currentSplitIterator = NULL;
     }
 
-    if(parent::valid()) {
+    // INVESTIGATE: We had parent::valid() here before, which should
+    //              actually end up at the same code as
+    //              $this->getInnerIterator()->valid(), but doesn't for some
+    //              reason. Maybe some form of PHP internal cache? Or other
+    //              mess-up in the IteratorIterator? Or did I really loose
+    //              my mind?
+    if($this->getInnerIterator()->valid()) {
       $this->currentSplitIterator
-        = new SplitInnerIterator($this->getInnerIterator(), array($this, 'needsSplit'));
+        = new SplitInnerIterator($this->getInnerIterator(),
+                                 array($this, 'needsSplit'),
+                                 $this->splitWhen == self::SPLIT_AFTER
+                                 ? SplitInnerIterator::STOP_AFTER
+                                 : SplitInnerIterator::STOP_BEFORE);
       return TRUE;
     } else {
       return FALSE;
