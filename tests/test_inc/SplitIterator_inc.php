@@ -1,4 +1,6 @@
 <?php
+require_once("TestHelpers.php");
+
 /**
  * Implementation of a simple {@see SplitIterator} for test cases.
  *

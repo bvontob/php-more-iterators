@@ -2,6 +2,7 @@
 SplitCallbackIterator: Documentation example
 --FILE--
 <?php
+require_once("test_inc/TestHelpers.php");
 require_once("SplitCallbackIterator.php");
 
 $lines = new ArrayIterator(array("First",
